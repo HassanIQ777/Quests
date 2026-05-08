@@ -1,27 +1,16 @@
 #pragma once
 
+#include "json.hpp"
 #include <algorithm>
-#include <chrono>
 #include <cstddef>
+#include <fstream>
 #include <iterator>
 #include <string>
 #include <vector>
 
+using json = nlohmann::json;
+
 enum class QuestType { Main, Side };
-
-/*
-struct QuestStats {
-  int main_completed = 0;
-  int main_total = 0;
-  int side_completed = 0;
-  int side_total = 0;
-  int missed_total = 0;
-  int missed_main = 0;
-  int missed_side = 0;
-
-  double completion_rate = 0.0;
-};
-*/
 
 class Quest {
   QuestType type;
@@ -31,6 +20,11 @@ class Quest {
 public:
   Quest(const std::string &quest_content, QuestType quest_type)
       : type(quest_type), content(quest_content) {}
+
+  Quest(const std::string &quest_content, QuestType quest_type,
+        int completion_percentage, std::string desc)
+      : type(quest_type), completion_percentage(completion_percentage),
+        content(quest_content), description(desc) {}
 
   int getCompletionPercentage() const { return completion_percentage; }
   std::string getContent() const { return content; }
@@ -45,6 +39,19 @@ public:
   bool isComplete() const { return completion_percentage >= 100; }
 
   bool operator==(const Quest &other) const { return content == other.content; }
+
+  json toJSON() const {
+    return json{
+        {"content", content},
+        {"type", type},
+        {"completion", completion_percentage},
+        {"description", description},
+    };
+  }
+
+  static Quest fromJSON(const json &j) {
+    return Quest(j["content"], j["type"], j["completion"], j["description"]);
+  };
 };
 
 class QuestManager {
@@ -71,58 +78,6 @@ class QuestManager {
   }
 
 public:
-  /*
-    void checkAndReset() {
-      auto now = std::chrono::system_clock::now();
-      auto time_t_now = std::chrono::system_clock::to_time_t(now);
-      auto tm = localtime(&time_t_now);
-
-      // Check if it's 3AM (03:00 - 03:59)
-      if (tm->tm_hour == 3) {
-        // Only reset once per day at 3AM
-        if (last_reset_time == 0 ||
-            difftime(time_t_now, last_reset_time) >= 86400) {
-          resetDailyQuests();
-          last_reset_time = time_t_now;
-        }
-      }
-    }
-    QuestStats getStats() const {
-      QuestStats stats;
-
-      // Count main quests
-      stats.main_total = main_quests.size();
-      for (const auto &q : main_quests) {
-        if (q.isComplete())
-          stats.main_completed++;
-      }
-
-      // Count side quests
-      stats.side_total = side_quests.size();
-      for (const auto &q : side_quests) {
-        if (q.isComplete())
-          stats.side_completed++;
-      }
-
-      // Count missed quests
-      stats.missed_total = missed_quests.size();
-      for (const auto &q : missed_quests) {
-        if (q.getQuestType() == QuestType::Main) {
-          stats.missed_main++;
-        } else {
-          stats.missed_side++;
-        }
-      }
-
-      // Calculate completion rate
-      int total = stats.main_total + stats.side_total;
-      int completed = stats.main_completed + stats.side_completed;
-      stats.completion_rate = (total > 0) ? (100.0 * completed / total) : 0.0;
-
-      return stats;
-    }
-    */
-
   void addQuest(const Quest &quest) {
     auto type = quest.getQuestType();
     std::vector<Quest> &vec =
@@ -131,7 +86,7 @@ public:
     vec.push_back(quest);
     // sort by completion percentage
     std::sort(vec.begin(), vec.end(), [](const Quest &a, const Quest &b) {
-      return a.getCompletionPercentage() > b.getCompletionPercentage();
+      return a.getContent().size() > b.getContent().size();
     });
   }
 
@@ -156,7 +111,7 @@ public:
     vec.erase(vec.begin() + index);
   }
 
-  // this function will only be used for printing
+  // this function "should" only be used for printing
   size_t getQuestIndex(Quest &quest) {
     auto type = quest.getQuestType();
     std::vector<Quest> &vec =
@@ -198,5 +153,37 @@ public:
       }
     }
     return removed;
+  }
+
+  void save(const std::string &filename) {
+    std::vector<Quest> quests;
+    json data;
+    quests.reserve(main_quests.size() + side_quests.size());
+    quests.insert(quests.end(), main_quests.begin(), main_quests.end());
+    quests.insert(quests.end(), side_quests.begin(), side_quests.end());
+
+    for (const auto &q : quests) {
+      data.push_back(q.toJSON());
+    }
+    std::ofstream file(filename);
+    file << data.dump(2);
+  }
+
+  void load(const std::string &filename) {
+    std::vector<Quest> quests;
+    std::ifstream file(filename);
+    json data;
+    file >> data;
+
+    quests.clear();
+    for (const auto &j : data) {
+      quests.push_back(Quest::fromJSON(j));
+    }
+
+    main_quests.clear();
+    side_quests.clear();
+    for (const auto &q : quests) {
+      addQuest(q);
+    }
   }
 };

@@ -80,4 +80,9 @@ clean:
 	-@rm -f $(BINDIR)/$(TARGET)
 	@echo "Cleaned up the ashes. Nothing but echoes remain..."
 
+version:
+	@grep -oP 'VERSION\s*=\s*"?\K[0-9]+\.[0-9]+\.[0-9]+' Globals.hpp | head -1
+
+.PHONY: version
+
 .SUFFIXES:

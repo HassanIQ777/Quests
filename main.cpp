@@ -5,23 +5,22 @@
 #include "ui.hpp"
 
 int main(int argc, char **argv) {
-  Globals globals;
+  auto &globals = Globals::getInstance();
   globals.parser.setArgs(argc, argv);
   parseArgs(globals);
   createFiles(globals);
-  readQuests(globals);
+  globals.quest_manager.load(globals.paths.quests);
 
   while (globals.running) {
     funcs::clearTerminal();
     printLogo();
-    // globals.quest_manager.checkAndReset(); // needed to update the stats
 
     printQuests(globals);
     print("\n[H] Help\n");
 
     const std::string input = funcs::getKeyPress();
     handleInput(globals, input);
-    writeQuests(globals);
+    globals.quest_manager.save(globals.paths.quests);
   }
 
   funcs::printCentered("Thanks for using Daily Quests!\n");

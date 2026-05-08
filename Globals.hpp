@@ -8,15 +8,28 @@
 using funcs::print;
 
 struct Paths {
-  std::filesystem::path home_dir, quests_dir;     // directories
-  std::filesystem::path main_quests, side_quests; // files
-  std::filesystem::path logs, stats;              // interesting stuff
+  std::filesystem::path home_dir, quests_dir; // directories
+  std::filesystem::path quests;               // files
+  std::filesystem::path logs, stats;          // interesting stuff
 };
 
 struct Globals {
+  std::string VERSION = "1.3.0";
   bool running = true;
   CLIParser parser;
-  std::string version = "1.2";
   QuestManager quest_manager;
   Paths paths;
+
+  static Globals &getInstance() {
+    static Globals globals;
+    return globals;
+  }
+
+  Globals(const Globals &) = delete;
+  Globals(Globals &&) = delete;
+  Globals &operator=(const Globals &) = delete;
+  Globals &operator=(Globals &&) = delete;
+
+private:
+  Globals() {}
 };

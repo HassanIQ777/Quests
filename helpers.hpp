@@ -36,8 +36,7 @@ inline void printHelp(Globals &globals) {
 
 inline void assignPaths(Globals &globals) {
   globals.paths.quests_dir = globals.paths.home_dir / "Quests";
-  globals.paths.main_quests = globals.paths.quests_dir / "main-quests.txt";
-  globals.paths.side_quests = globals.paths.quests_dir / "side-quests.txt";
+  globals.paths.quests = globals.paths.quests_dir / "quests.json";
   globals.paths.logs = globals.paths.quests_dir / "logs.txt";
   globals.paths.stats = globals.paths.quests_dir / "stats.ini";
 }
@@ -62,7 +61,7 @@ inline void parseArgs(Globals &globals) {
     printHelp(globals);
     exit(0);
   } else if (first_arg == "-v") {
-    print("dailyquests version ", globals.version, "\n");
+    print("dailyquests version ", globals.VERSION, "\n");
     exit(0);
   }
 
@@ -277,21 +276,22 @@ inline void handleInput(Globals &globals, std::string input) {
     if (!description.empty()) {
       print("Description: ", color::_ITALIC, description, color::_RESET, "\n");
     }
-    print("This Quest Is ", completion_percentage, "% Complete.\n");
+    print("This quest is ", completion_percentage, "% complete.\n");
     funcs::getKeyPress();
   }
 }
 
-inline void createFile(Globals &globals, const std::string &fp) {
-  if (!File::isfile(fp)) // fp is short for filepath
-  {
+inline bool createFile(Globals &globals, const std::string &fp) {
+  if (!File::isfile(fp)) {
     if (File::createfile(fp)) {
       LOG(globals, "Successfully created '" + fp + "'");
+      return true; // we newly created this
     } else {
       LOG(globals, "Failed to create '" + fp + "'");
       exit(-3);
     }
   }
+  return false; // already created
 }
 
 inline void createFiles(Globals &globals) {
@@ -302,8 +302,9 @@ inline void createFiles(Globals &globals) {
     }
   }
 
-  createFile(globals, globals.paths.main_quests);
-  createFile(globals, globals.paths.side_quests);
+  if (createFile(globals, globals.paths.quests)) {
+    File::appendline(globals.paths.quests, "[]");
+  }
   createFile(globals, globals.paths.logs);
   // createFile(globals, globals.paths.stats); // will add this later...one day
 }
@@ -329,24 +330,6 @@ loadQuests(const std::vector<std::string> &quests_file, QuestType type) {
   return result;
 }
 
-inline void readQuests(Globals &globals) {
-  const std::vector<std::string> main_quests_file =
-      File::readfile(globals.paths.main_quests);
-  const std::vector<std::string> side_quests_file =
-      File::readfile(globals.paths.side_quests);
-  if (main_quests_file.empty() && side_quests_file.empty()) {
-    return;
-  }
-
-  std::vector<Quest> main_quests =
-      loadQuests(main_quests_file, QuestType::Main);
-  std::vector<Quest> side_quests =
-      loadQuests(side_quests_file, QuestType::Side);
-
-  globals.quest_manager.setMainQuests(main_quests);
-  globals.quest_manager.setSideQuests(side_quests);
-}
-
 inline std::vector<std::string> createVector(std::vector<Quest> &quests) {
   static const char delimiter = 0x1F;
   static const std::string d(1, delimiter);
@@ -363,15 +346,4 @@ inline std::vector<std::string> createVector(std::vector<Quest> &quests) {
   }
 
   return result;
-}
-
-inline void writeQuests(Globals &globals) {
-
-  const std::vector<std::string> main_quests_output =
-      createVector(globals.quest_manager.getMainQuests());
-  const std::vector<std::string> side_quests_output =
-      createVector(globals.quest_manager.getSideQuests());
-
-  File::writefile(globals.paths.main_quests, main_quests_output);
-  File::writefile(globals.paths.side_quests, side_quests_output);
 }
