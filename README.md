@@ -1,4 +1,4 @@
-# ⚔️ Daily Quests 1.3.0
+# Daily Quests 1.3.0
 
 A gamified CLI-based quest and to-do list manager designed to make your daily tasks feel like an adventure.
 
@@ -11,7 +11,7 @@ A gamified CLI-based quest and to-do list manager designed to make your daily ta
                \___\_\\__,_|\___||___/\__|___/
 ```
 
-## ✨ Features
+## Features
 
 - **Quest Categorization**: Distinguish between **Main Quests** (critical tasks) and **Side Quests** (optional/minor tasks).
 - **Progress Tracking**: Set completion percentages and visualize them with color-coded progress bars.
@@ -20,7 +20,7 @@ A gamified CLI-based quest and to-do list manager designed to make your daily ta
 - **Logging**: Keeps track of your actions in a log file for history.
 - **Clean UI**: Uses ANSI colors and ASCII art for a modern terminal feel.
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -32,7 +32,7 @@ A gamified CLI-based quest and to-do list manager designed to make your daily ta
 To build the project in release mode:
 
 ```bash
-make release
+make
 ```
 
 For a debug build:
@@ -51,7 +51,7 @@ To run the program, you must provide a home directory in which it will create it
 ```
 Then it will create a Quests directory on its own and store its data in there.
 
-## 🎮 Controls
+## Controls
 
 Once the program is running, use the following keys:
 
@@ -65,17 +65,17 @@ Once the program is running, use the following keys:
 | `H` | Show **Help** menu |
 | `Q` | **Quit** the application |
 
-## 🛠️ Technical Details
+## Technical Details
 
 - **Language**: C++20
 - **Utilities**: Uses my utility library `libutils` for terminal manipulation, file I/O, and string processing.
 - **Data Storage**: Quests are stored as JSON inside of a file named quests.json in the specified home directory.
 
-## 📄 License
+## License
 
 This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
 
-## 👤 Author
+## Author
 
 **HassanIQ777**
 
