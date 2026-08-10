@@ -2,6 +2,9 @@ CXX := g++
 TARGET := quests
 BINDIR := .
 
+PREFIX  := /usr/local
+INSTDIR := $(PREFIX)/bin
+
 # Library directory
 LIB_UTILS_DIR := libutils
 LIB_UTILS_LIB := $(LIB_UTILS_DIR)/libutils.a
@@ -45,7 +48,7 @@ DEBUG_FLAGS   := -std=c++20 -g -Og -DDEBUG $(WARNINGS) \
 # Default is release
 CXXFLAGS := $(RELEASE_FLAGS)
 
-.PHONY: all debug release clean run
+.PHONY: all debug release clean run install uninstall
 
 all: release
 
@@ -73,16 +76,21 @@ $(LIB_UTILS_LIB):
 	fi
 
 run: all
-	@./$(BINDIR)/$(TARGET)
+	@./$(BINDIR)/$(TARGET) $(ARGS)
+
+install: release
+	@echo "Installing $(TARGET) to $(INSTDIR)..."
+	@install -Dm755 $(BINDIR)/$(TARGET) $(INSTDIR)/$(TARGET)
+	@echo "$(TARGET) is now a system citizen. Run it from anywhere."
+
+uninstall:
+	@echo "Evicting $(TARGET) from $(INSTDIR)..."
+	@rm -f $(INSTDIR)/$(TARGET)
+	@echo "$(TARGET) has been yeeted into the void."
 
 clean:
 	-@rm -f $(OBJS)
 	-@rm -f $(BINDIR)/$(TARGET)
 	@echo "Cleaned up the ashes. Nothing but echoes remain..."
-
-version:
-	@grep -oP 'VERSION\s*=\s*"?\K[0-9]+\.[0-9]+\.[0-9]+' Globals.hpp | head -1
-
-.PHONY: version
 
 .SUFFIXES:

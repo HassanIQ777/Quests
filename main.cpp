@@ -3,8 +3,11 @@
 #include "libutils/src/CLIParser.hpp"
 #include "libutils/src/funcs.hpp"
 #include "ui.hpp"
+#include <csignal>
 
 int main(int argc, char **argv) {
+  std::signal(SIGINT, handleInterrupt);
+  funcs::alternativeTerminal();
   auto &globals = Globals::getInstance();
   globals.parser.setArgs(argc, argv);
   parseArgs(globals);
@@ -23,6 +26,7 @@ int main(int argc, char **argv) {
     globals.quest_manager.save(globals.paths.quests);
   }
 
+  funcs::restoreTerminal();
   funcs::printCentered("Thanks for using Daily Quests!\n");
   funcs::printCentered("By HassanIQ777\n");
 }

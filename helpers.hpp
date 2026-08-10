@@ -19,6 +19,12 @@ inline void LOG(Globals &globals, const std::string &msg) {
   File::insertline(globals.paths.logs, output, 0);
 }
 
+inline void handleInterrupt(int)
+{
+  print(color::_RESET);
+  funcs::restoreTerminal();
+}
+
 inline std::string trimStr(std::string text, size_t WIDTH) {
   if (text.length() <= WIDTH) {
     return text;
