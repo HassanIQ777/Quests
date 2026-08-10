@@ -19,8 +19,7 @@ inline void LOG(Globals &globals, const std::string &msg) {
   File::insertline(globals.paths.logs, output, 0);
 }
 
-inline void handleInterrupt(int)
-{
+inline void handleInterrupt(int) {
   print(color::_RESET);
   funcs::restoreTerminal();
 }
@@ -67,7 +66,7 @@ inline void parseArgs(Globals &globals) {
     printHelp(globals);
     exit(0);
   } else if (first_arg == "-v") {
-    print("dailyquests version ", globals.VERSION, "\n");
+    print("quests version ", globals.VERSION, "\n");
     exit(0);
   }
 

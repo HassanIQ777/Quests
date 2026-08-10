@@ -7,13 +7,13 @@
 
 int main(int argc, char **argv) {
   std::signal(SIGINT, handleInterrupt);
-  funcs::alternativeTerminal();
   auto &globals = Globals::getInstance();
   globals.parser.setArgs(argc, argv);
   parseArgs(globals);
   createFiles(globals);
   globals.quest_manager.load(globals.paths.quests);
 
+  funcs::alternativeTerminal();
   while (globals.running) {
     funcs::clearTerminal();
     printLogo();
