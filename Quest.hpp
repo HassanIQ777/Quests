@@ -55,9 +55,7 @@ public:
 };
 
 class QuestManager {
-  time_t last_reset_time = 0;
-
-  std::vector<Quest> main_quests, side_quests, missed_quests;
+  std::vector<Quest> main_quests, side_quests;
 
 public:
   void addQuest(const Quest &quest) {
