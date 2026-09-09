@@ -1,4 +1,4 @@
-# Daily Quests 1.3.0
+# Quests v26.9.9
 
 A gamified CLI-based quest and to-do list manager designed to make your daily tasks feel like an adventure.
 

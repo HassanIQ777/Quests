@@ -14,7 +14,7 @@ struct Paths {
 };
 
 struct Globals {
-  std::string VERSION = "26.9.9";
+  std::string VERSION = "v26.9.9";
   bool running = true;
   CLIParser parser;
   QuestManager quest_manager;

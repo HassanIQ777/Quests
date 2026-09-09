@@ -66,7 +66,7 @@ inline void parseArgs(Globals &globals) {
     printHelp(globals);
     exit(0);
   } else if (first_arg == "-v") {
-    print("quests version ", globals.VERSION, "\n");
+    print("quests ", globals.VERSION, "\n");
     exit(0);
   }
 
