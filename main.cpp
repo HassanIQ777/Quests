@@ -30,6 +30,6 @@ int main(int argc, char **argv) {
   }
 
   funcs::restoreTerminal();
-  funcs::printCentered("Thanks for using Daily Quests!\n");
+  funcs::printCentered("Thanks for using Quests!\n");
   funcs::printCentered("By HassanIQ777\n");
 }

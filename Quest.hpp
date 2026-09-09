@@ -59,24 +59,6 @@ class QuestManager {
 
   std::vector<Quest> main_quests, side_quests, missed_quests;
 
-  void resetDailyQuests() {
-    // Move incomplete quests to "missed"
-    for (auto &quest : main_quests) {
-      if (!quest.isComplete()) {
-        missed_quests.push_back(quest);
-      }
-    }
-    for (auto &quest : side_quests) {
-      if (!quest.isComplete()) {
-        missed_quests.push_back(quest);
-      }
-    }
-
-    // Clear the vectors
-    main_quests.clear();
-    side_quests.clear();
-  }
-
 public:
   void addQuest(const Quest &quest) {
     auto type = quest.getQuestType();
