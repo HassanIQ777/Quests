@@ -15,6 +15,9 @@ int main(int argc, char **argv) {
 
   funcs::alternativeTerminal();
   while (globals.running) {
+    globals.quest_manager.load(
+        globals.paths.quests); // load again in case we modified the quests on
+                               // another machine
     funcs::clearTerminal();
     printLogo();
 
