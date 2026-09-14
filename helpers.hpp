@@ -13,8 +13,19 @@
 #include <string>
 #include <vector>
 
+inline std::string getdate() {
+  const auto now = std::chrono::system_clock::now();
+  const std::time_t time = std::chrono::system_clock::to_time_t(now);
+  const std::tm tm = *std::localtime(&time);
+
+  std::ostringstream oss;
+  oss << std::put_time(&tm, "%a %I:%M %p");
+  //  this format looks like: Sat 01:09 AM
+  return oss.str();
+}
+
 inline void LOG(Globals &globals, const std::string &msg) {
-  std::string date = funcs::currentTime();
+  std::string date = getdate();
   std::string output = date + " -> " + msg;
   File::insertline(globals.paths.logs, output, 0);
 }
