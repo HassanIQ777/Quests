@@ -16,8 +16,8 @@ public:
   Quest(const std::string &quest_content, QuestType quest_type)
       : type(quest_type), content(quest_content) {}
 
-  Quest(const std::string &quest_content, QuestType quest_type,
-        int completion, std::string desc)
+  Quest(const std::string &quest_content, QuestType quest_type, int completion,
+        std::string desc)
       : type(quest_type), completion_percentage(completion),
         content(quest_content), description(desc) {}
 

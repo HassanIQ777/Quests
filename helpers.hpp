@@ -55,12 +55,12 @@ inline void assignPaths(Globals &globals) {
 inline void parseArgs(Globals &globals) {
   if (int argc = globals.parser.getArgc(); argc != 2) {
     if (argc == 1) {
-      Log::error(0,"One argument is required but nothing was provided.");
+      Log::error(0, "One argument is required but nothing was provided.");
     } else {
 
-      Log::error(0,"One argument is required but " +
-                     funcs::str(globals.parser.getArgc() - 1) +
-                     " arguments were provided.");
+      Log::error(0, "One argument is required but " +
+                        funcs::str(globals.parser.getArgc() - 1) +
+                        " arguments were provided.");
     }
     printHelp(globals);
     exit(-1);
@@ -79,7 +79,7 @@ inline void parseArgs(Globals &globals) {
     globals.paths.home_dir = first_arg;
     assignPaths(globals);
   } else {
-    Log::error(1,"The provided path is not a directory.");
+    Log::error(1, "The provided path is not a directory.");
   }
 }
 
@@ -285,7 +285,8 @@ inline void handleInput(Globals &globals, std::string input) {
     int completion_percentage = quest.getCompletionPercentage();
     print("\n", content, "\n");
     if (!description.empty()) {
-      print("Description: ", color::A_ITALIC, description, color::A_RESET, "\n");
+      print("Description: ", color::A_ITALIC, description, color::A_RESET,
+            "\n");
     }
     print("This quest is ", completion_percentage, "% complete.\n");
     funcs::getKeyPress();
@@ -308,7 +309,7 @@ inline bool createFile(Globals &globals, const std::string &fp) {
 inline void createFiles(Globals &globals) {
   if (std::string dir = globals.paths.quests_dir; !File::isdirectory(dir)) {
     if (!File::createdir(dir)) {
-      Log::error(1,"Failed to created '" + dir + "'");
+      Log::error(1, "Failed to created '" + dir + "'");
       // we can't really log this to logs.txt since it doesn't exist yet
     }
   }
