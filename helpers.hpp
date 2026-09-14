@@ -26,7 +26,7 @@ inline void LOG(Globals &globals, const std::string &msg) {
 }
 
 inline void handleInterrupt(int) {
-  print(color::_RESET);
+  print(color::A_RESET);
   funcs::restoreTerminal();
 }
 
@@ -55,13 +55,12 @@ inline void assignPaths(Globals &globals) {
 inline void parseArgs(Globals &globals) {
   if (int argc = globals.parser.getArgc(); argc != 2) {
     if (argc == 1) {
-      Log::error("One argument is required but nothing was provided.", false);
+      Log::error(0,"One argument is required but nothing was provided.");
     } else {
 
-      Log::error("One argument is required but " +
+      Log::error(0,"One argument is required but " +
                      funcs::str(globals.parser.getArgc() - 1) +
-                     " arguments were provided.",
-                 false);
+                     " arguments were provided.");
     }
     printHelp(globals);
     exit(-1);
@@ -80,7 +79,7 @@ inline void parseArgs(Globals &globals) {
     globals.paths.home_dir = first_arg;
     assignPaths(globals);
   } else {
-    Log::error("The provided path is not a directory.", true);
+    Log::error(1,"The provided path is not a directory.");
   }
 }
 
@@ -125,18 +124,18 @@ inline void handleInput(Globals &globals, std::string input) {
 
   // Add Quest
   else if (input == "A") {
-    print("Quest: ", color::_ITALIC);
+    print("Quest: ", color::A_ITALIC);
     std::string quest_content;
     std::getline(std::cin, quest_content);
-    print(color::_RESET);
+    print(color::A_RESET);
     quest_content = strutils::trim(quest_content);
     if (quest_content.size() < 2) {
       return;
     }
-    print("Description: ", color::_ITALIC);
+    print("Description: ", color::A_ITALIC);
     std::string description;
     std::getline(std::cin, description);
-    print(color::_RESET);
+    print(color::A_RESET);
     description = strutils::trim(description);
     if (description.size() < 2) {
       description.clear();
@@ -265,11 +264,11 @@ inline void handleInput(Globals &globals, std::string input) {
     }
 
     print("Quest Number: ");
-    int num = Input::read<int>();
+    auto num = Input::read<int>();
     if (!num)
       return;
 
-    size_t index = num - 1;
+    size_t index = *num - 1;
 
     if (index >= vec.size()) {
       Log::warn("No quest of this index exists.");
@@ -286,7 +285,7 @@ inline void handleInput(Globals &globals, std::string input) {
     int completion_percentage = quest.getCompletionPercentage();
     print("\n", content, "\n");
     if (!description.empty()) {
-      print("Description: ", color::_ITALIC, description, color::_RESET, "\n");
+      print("Description: ", color::A_ITALIC, description, color::A_RESET, "\n");
     }
     print("This quest is ", completion_percentage, "% complete.\n");
     funcs::getKeyPress();
@@ -309,7 +308,7 @@ inline bool createFile(Globals &globals, const std::string &fp) {
 inline void createFiles(Globals &globals) {
   if (std::string dir = globals.paths.quests_dir; !File::isdirectory(dir)) {
     if (!File::createdir(dir)) {
-      Log::error("Failed to created '" + dir + "'");
+      Log::error(1,"Failed to created '" + dir + "'");
       // we can't really log this to logs.txt since it doesn't exist yet
     }
   }

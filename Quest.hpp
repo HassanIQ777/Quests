@@ -17,8 +17,8 @@ public:
       : type(quest_type), content(quest_content) {}
 
   Quest(const std::string &quest_content, QuestType quest_type,
-        int completion_percentage, std::string desc)
-      : type(quest_type), completion_percentage(completion_percentage),
+        int completion, std::string desc)
+      : type(quest_type), completion_percentage(completion),
         content(quest_content), description(desc) {}
 
   int getCompletionPercentage() const { return completion_percentage; }
