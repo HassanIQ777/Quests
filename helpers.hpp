@@ -3,11 +3,10 @@
 #include "Globals.hpp"
 #include "Quest.hpp"
 #include "libutils/File.hpp"
+#include "libutils/Input.hpp"
 #include "libutils/Log.hpp"
 #include "libutils/color.hpp"
 #include "libutils/strutils.hpp"
-#include "libutils/Input.hpp"
-
 
 inline std::string getdate() {
   const auto now = std::chrono::system_clock::now();
@@ -266,8 +265,10 @@ inline void handleInput(Globals &globals, std::string input) {
     }
 
     print("Quest Number: ");
-    int num = Input;
-    
+    int num = Input::read<int>();
+    if (!num)
+      return;
+
     size_t index = num - 1;
 
     if (index >= vec.size()) {
