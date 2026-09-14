@@ -115,9 +115,8 @@ inline std::string padRight(const std::string &str, size_t total_width) {
 }
 
 inline void printLogo() {
-  std::string date = funcs::currentTime().substr(11, 5);
-  // funcs::printLeftMiddleRight("", "", date);
-  print(strutils::pad_left(date, funcs::getTerminalWidth()), "\n");
+  std::string date = getdate();
+  funcs::printLeftMiddleRight("", "", date);
   print(color::TXT_GREEN, color::A_BOLD);
   print(R"( 
                 ____                  _       
