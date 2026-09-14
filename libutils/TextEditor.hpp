@@ -1,8 +1,6 @@
-// texteditor.hpp
-/* TextEditor by HassanIQ777
-created: 2025-Jun-27
-updated: 2025-Jul-9
-*/
+/* Part of https://github.com/HassanIQ777/libutils
+Made on:     2025-Jun-27
+Last update: 2025-Jul-9 */
 
 #ifndef TEXTEDITOR
 #define TEXTEDITOR
@@ -12,8 +10,14 @@ updated: 2025-Jul-9
 #include <cstddef>
 #include <ctime>
 #include <iomanip>
-#include <limits>
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <vector>
+
+#if !defined(_WIN32)
 #include <sys/stat.h>
+#endif
 
 // start of class
 class TextEditor {
@@ -245,7 +249,7 @@ inline void TextEditor::showFileData() {
   funcs::print("Lines: ", p_file_content.size(), "\n");
 
   std::string creation_time = "Unavailable";
-#ifdef __linux__
+#ifndef _WIN32
   struct stat file_stat{};
   if (stat(p_filename.c_str(), &file_stat) == 0) {
 #if defined(st_birthtime)
@@ -298,15 +302,7 @@ inline std::string TextEditor::p_formatTime(std::time_t timestamp) {
 }
 
 inline std::size_t TextEditor::p_getTerminalHeight() {
-#ifdef _WIN32
-  return 24;
-#else
-  struct winsize w{};
-  if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &w) == -1 || w.ws_row == 0) {
-    return 24;
-  }
-  return static_cast<std::size_t>(w.ws_row);
-#endif
+  return funcs::getTerminalHeight();
 }
 
 inline std::size_t TextEditor::p_getPageSize() {

@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Globals.hpp"
-#include "libutils/src/color.hpp"
-#include "libutils/src/strutils.hpp"
+#include "libutils/color.hpp"
+#include "libutils/strutils.hpp"
 
 inline std::string repeatString(int count, const std::string &str) {
   std::string result;
@@ -23,7 +23,7 @@ inline std::string coloredProgressBar(int percent, int width = 20) {
   std::string bar = "[";
   bar += color;
   bar += repeatString(filled, "█");
-  bar += color::_RESET;
+  bar += color::A_RESET;
   bar += repeatString(width - filled, "░");
   bar += "] " + strutils::pad_left(std::to_string(percent) + "%", 4);
 
@@ -36,7 +36,24 @@ inline std::string colorizeQuest(const Quest &quest) {
 
   const std::string color =
       (type == QuestType::Main) ? color::TXT_YELLOW : color::TXT_CYAN;
-  return color::_BOLD + color + content;
+  return color::A_BOLD + color + content;
+}
+
+inline size_t visibleLength(const std::string &str) {
+  size_t count = 0;
+  bool in_escape = false;
+
+  for (char c : str) {
+    if (c == '\033') {
+      in_escape = true;
+    } else if (in_escape && c == 'm') {
+      in_escape = false;
+    } else if (!in_escape) {
+      count++;
+    }
+  }
+
+  return count;
 }
 
 inline void printQuest(QuestManager &quest_manager, Quest &quest) {
@@ -49,12 +66,12 @@ inline void printQuest(QuestManager &quest_manager, Quest &quest) {
 
   // Build the line
   std::string index_str = funcs::str(index + 1) + "  ";
-  std::string quest_str = colorized_quest + color::_RESET;
+  std::string quest_str = colorized_quest + color::A_RESET;
 
   // Calculate visible lengths
-  size_t index_visible = funcs::visibleLength(index_str);
-  size_t quest_visible = funcs::visibleLength(quest_str);
-  size_t progress_visible = funcs::visibleLength(progress_bar);
+  size_t index_visible = visibleLength(index_str);
+  size_t quest_visible = visibleLength(quest_str);
+  size_t progress_visible = visibleLength(progress_bar);
 
   size_t total_visible = index_visible + quest_visible + progress_visible;
   size_t padding = (total_visible < width) ? (width - total_visible) : 1;
@@ -86,26 +103,9 @@ inline void printQuests(Globals &globals) {
   if (quest_manager.getMainQuests().size() +
           quest_manager.getSideQuests().size() ==
       0) {
-    print(color::_ITALIC, "There are no quests, try adding some...\n",
-          color::_RESET);
+    print(color::A_ITALIC, "There are no quests, try adding some...\n",
+          color::A_RESET);
   }
-}
-
-inline size_t visibleLength(const std::string &str) {
-  size_t count = 0;
-  bool in_escape = false;
-
-  for (char c : str) {
-    if (c == '\033') {
-      in_escape = true;
-    } else if (in_escape && c == 'm') {
-      in_escape = false;
-    } else if (!in_escape) {
-      count++;
-    }
-  }
-
-  return count;
 }
 
 inline std::string padRight(const std::string &str, size_t total_width) {
@@ -118,7 +118,7 @@ inline void printLogo() {
   std::string date = funcs::currentTime().substr(11, 5);
   // funcs::printLeftMiddleRight("", "", date);
   print(strutils::pad_left(date, funcs::getTerminalWidth()), "\n");
-  print(color::TXT_GREEN, color::_BOLD);
+  print(color::TXT_GREEN, color::A_BOLD);
   print(R"( 
                 ____                  _       
                / __ \                | |      
@@ -129,5 +129,5 @@ inline void printLogo() {
                                               
                                               
 )");
-  print(color::_RESET);
+  print(color::A_RESET);
 }

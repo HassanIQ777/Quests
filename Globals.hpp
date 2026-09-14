@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Quest.hpp"
-#include "libutils/src/CLIParser.hpp"
-#include "libutils/src/funcs.hpp"
+#include "libutils/CLIParser.hpp"
+#include "libutils/funcs.hpp"
 
 using funcs::print;
 
