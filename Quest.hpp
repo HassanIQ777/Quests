@@ -1,12 +1,7 @@
 #pragma once
 
 #include "json.hpp"
-#include <algorithm>
-#include <cstddef>
 #include <fstream>
-#include <iterator>
-#include <string>
-#include <vector>
 
 using json = nlohmann::json;
 

@@ -1,12 +1,8 @@
 #pragma once
 
 #include "Globals.hpp"
-#include "Quest.hpp"
 #include "libutils/src/color.hpp"
-#include "libutils/src/funcs.hpp"
 #include "libutils/src/strutils.hpp"
-#include <cstddef>
-#include <string>
 
 inline std::string repeatString(int count, const std::string &str) {
   std::string result;

@@ -1,7 +1,4 @@
-#include "Globals.hpp"
 #include "helpers.hpp"
-#include "libutils/src/CLIParser.hpp"
-#include "libutils/src/funcs.hpp"
 #include "ui.hpp"
 #include <csignal>
 

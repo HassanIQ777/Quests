@@ -5,13 +5,7 @@
 #include "libutils/src/File.hpp"
 #include "libutils/src/Log.hpp"
 #include "libutils/src/color.hpp"
-#include "libutils/src/funcs.hpp"
 #include "libutils/src/strutils.hpp"
-// #include "ui.hpp"
-#include <cstddef>
-#include <cstdlib>
-#include <string>
-#include <vector>
 
 inline std::string getdate() {
   const auto now = std::chrono::system_clock::now();
