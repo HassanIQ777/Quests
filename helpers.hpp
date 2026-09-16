@@ -169,10 +169,11 @@ inline void handleInput(Globals &globals, std::string input) {
     }
 
     print("Quest Number: ");
-    int num;
-    std::cin >> num;
-    std::cin.ignore();
-    size_t index = num - 1;
+    auto num = Input::read<int>();
+    if (!num)
+      return;
+      
+    size_t index = *num - 1;
 
     if (index >= vec.size()) {
       Log::warn("No quest of this index exists.");
@@ -222,10 +223,11 @@ inline void handleInput(Globals &globals, std::string input) {
     }
 
     print("Quest Number: ");
-    int num;
-    std::cin >> num;
-    std::cin.ignore();
-    size_t index = num - 1;
+    auto num = Input::read<int>();
+    if (!num)
+      return;
+      
+    size_t index = *num - 1;
 
     if (index >= vec.size()) {
       Log::warn("No quest of this index exists.");
