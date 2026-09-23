@@ -1,4 +1,4 @@
-# Quests v26.9.9
+# Quests v26.9.17-0
 
 A gamified CLI-based quest and to-do list manager designed to make your daily tasks feel like an adventure.
 
