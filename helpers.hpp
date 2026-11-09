@@ -7,6 +7,7 @@
 #include "libutils/Log.hpp"
 #include "libutils/color.hpp"
 #include "libutils/strutils.hpp"
+#include <cstdlib>
 
 inline std::string currentdate() {
   const auto now = std::chrono::system_clock::now();
@@ -40,46 +41,42 @@ inline std::string trimStr(std::string text, size_t WIDTH) {
 inline void printHelp(Globals &globals) {
   const std::string program_name = globals.parser.getArg(0);
   print("Usage:\n");
-  print("  ", program_name, " <HOME_DIR>\n");
+  print("  ", program_name, "       run the program normally\n");
   print("  ", program_name, " -h    print this help message\n");
   print("  ", program_name, " -v    print version\n");
 }
 
 inline void assignPaths(Globals &globals) {
-  globals.paths.quests_dir = globals.paths.home_dir / "Quests";
+  globals.paths.quests_dir = globals.paths.home_dir / ".Quests";
   globals.paths.quests = globals.paths.quests_dir / "quests.json";
   globals.paths.logs = globals.paths.quests_dir / "logs.txt";
-  globals.paths.stats = globals.paths.quests_dir / "stats.ini";
+  // globals.paths.stats = globals.paths.quests_dir / "stats.ini";
 }
 
 inline void parseArgs(Globals &globals) {
-  if (int argc = globals.parser.getArgc(); argc != 2) {
-    if (argc == 1) {
-      Log::error(0, "One argument is required but nothing was provided.");
-    } else {
-
-      Log::error(0, "One argument is required but " +
-                        funcs::str(globals.parser.getArgc() - 1) +
-                        " arguments were provided.");
-    }
+  int argc = globals.parser.getArgc();
+  if ( argc != 1 && argc != 2) {
+    Log::error(0, "What?");
     printHelp(globals);
     exit(-1);
   }
 
-  const std::string first_arg = globals.parser.getArg(1);
-  if (first_arg == "-h") {
-    printHelp(globals);
-    exit(0);
-  } else if (first_arg == "-v") {
-    print("quests ", globals.VERSION, "\n");
+  if(argc == 2){
+    const std::string first_arg = globals.parser.getArg(1);
+    if (first_arg == "-h") {
+      printHelp(globals);
+    } else if (first_arg == "-v") {
+      print("quests ", globals.VERSION, "\n");
+    }
     exit(0);
   }
 
-  if (File::isdirectory(first_arg)) {
-    globals.paths.home_dir = first_arg;
+  std::string home_dir = getenv("HOME");
+  if (File::isdirectory(home_dir)) {
+    globals.paths.home_dir = home_dir;
     assignPaths(globals);
   } else {
-    Log::error(1, "The provided path is not a directory.");
+    Log::error(1, "Couldn't find the home directory.");
   }
 }
 
@@ -172,7 +169,7 @@ inline void handleInput(Globals &globals, std::string input) {
     auto num = Input::read<int>();
     if (!num)
       return;
-      
+
     size_t index = *num - 1;
 
     if (index >= vec.size()) {
@@ -226,7 +223,7 @@ inline void handleInput(Globals &globals, std::string input) {
     auto num = Input::read<int>();
     if (!num)
       return;
-      
+
     size_t index = *num - 1;
 
     if (index >= vec.size()) {
@@ -320,7 +317,7 @@ inline void createFiles(Globals &globals) {
     File::appendline(globals.paths.quests, "[]");
   }
   createFile(globals, globals.paths.logs);
-  // createFile(globals, globals.paths.stats); // will add this later...one day
+  // createFile(globals, globals.paths.stats);
 }
 
 inline std::vector<Quest>

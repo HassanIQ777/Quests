@@ -8,13 +8,13 @@ using funcs::print;
 
 struct Paths {
   std::filesystem::path home_dir, quests_dir; // directories
-  std::filesystem::path quests;               // files
-  std::filesystem::path logs, stats;          // interesting stuff
+  std::filesystem::path quests, logs;         // files
+  // std::filesystem::path stats;             // will add this later...one day
 };
 
 struct Globals {
   std::string VERSION = "v26.11.9";
-  bool running = true;
+  bool running        = true;
   CLIParser parser;
   QuestManager quest_manager;
   Paths paths;
