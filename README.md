@@ -1,4 +1,4 @@
-# Quests v26.9.17-0
+# Quests v26.11.9
 
 A gamified CLI-based quest and to-do list manager designed to make your daily tasks feel like an adventure.
 
@@ -43,13 +43,10 @@ make debug
 
 ### Running
 
-To run the program, you must provide a home directory in which it will create its directory:
-
 ```bash
-./quests $HOME
-./quests ~/Documents
+./quests
 ```
-Then it will create a Quests directory on its own and store its data in there.
+Then it will create a Quests directory on its own and store its data in `$HOME/.Quests`.
 
 ## Controls
 
@@ -69,7 +66,7 @@ Once the program is running, use the following keys:
 
 - **Language**: C++20
 - **Utilities**: Uses my utility library `libutils` for terminal manipulation, file I/O, and string processing.
-- **Data Storage**: Quests are stored as JSON inside of a file named quests.json in the specified home directory.
+- **Data Storage**: Quests are stored as JSON inside of a file named quests.json.
 
 ## License
 
