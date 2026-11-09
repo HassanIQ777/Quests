@@ -3,6 +3,7 @@
 #include "Globals.hpp"
 #include "libutils/color.hpp"
 #include "libutils/strutils.hpp"
+#include "helpers.hpp"
 
 inline std::string repeatString(int count, const std::string &str) {
   std::string result;
@@ -115,7 +116,7 @@ inline std::string padRight(const std::string &str, size_t total_width) {
 }
 
 inline void printLogo() {
-  std::string date = getdate();
+  std::string date = currentdate();
   funcs::printLeftMiddleRight("", "", date);
   print(color::TXT_GREEN, color::A_BOLD);
   print(R"( 

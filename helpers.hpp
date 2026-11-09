@@ -8,7 +8,7 @@
 #include "libutils/color.hpp"
 #include "libutils/strutils.hpp"
 
-inline std::string getdate() {
+inline std::string currentdate() {
   const auto now = std::chrono::system_clock::now();
   const std::time_t time = std::chrono::system_clock::to_time_t(now);
   const std::tm tm = *std::localtime(&time);
@@ -20,7 +20,7 @@ inline std::string getdate() {
 }
 
 inline void LOG(Globals &globals, const std::string &msg) {
-  std::string date = getdate();
+  std::string date = currentdate();
   std::string output = date + " -> " + msg;
   File::insertline(globals.paths.logs, output, 0);
 }
